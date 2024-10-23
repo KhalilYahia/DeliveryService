@@ -27,12 +27,13 @@ namespace DeliveryService.Services.services
             _mapper = mapper;
         }
 
-        public async Task<int> Add(string Ip)
+        public async Task<int> Add(string Ip,string operation)
         {
 
             var model = new IPAdressLog
             {
                 Ip = Ip,
+                Operation=operation,
                 Date = Utils.ServerNow
             };
             _unitOfWork.repository<IPAdressLog>().Add(model);

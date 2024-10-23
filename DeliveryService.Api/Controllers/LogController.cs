@@ -39,7 +39,21 @@ namespace DeliveryService.WebApi.Controllers
 
             return res_;
         }
-       
+
+        /// <summary>
+        /// Просмотр всех операций с указанием адреса пользователя, выполнившего операцию, 
+        /// и времени каждой операции.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("GetAllLog")]
+        public async Task<ActionResult<List<IPAdressLogDto>>> GetAllLog()
+        {
+            var res_ = await _IPAdressLogService.GetAllIPAdressLog();
+
+            return Ok(res_);
+        }
+
+
 
         /// <summary>
         /// Эндпоинт для скачивания лог-файла.

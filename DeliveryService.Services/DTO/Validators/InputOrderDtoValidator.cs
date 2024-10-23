@@ -26,6 +26,8 @@ namespace DeleveryService.Services.DTO.Validators
             RuleFor(x => x.Region).NotEmpty().WithMessage("район Требуется")
                 .NotNull().WithMessage("район Требуется")
                 .MaximumLength(50).WithMessage("максимальное количество символов - 50");
+            
+            RuleFor(x => x.DeliveryTime).Must(BeARecentDate).WithMessage("DeliveryTime не может быть слишком старым.");
 
             RuleFor(x=>x.OrderNumber).NotEmpty().WithMessage("Номер заказа обязателен")
                 .NotNull().WithMessage("Номер заказа обязателен")
@@ -35,6 +37,15 @@ namespace DeleveryService.Services.DTO.Validators
                 return !(await _OrderService.IsOrderNumberExist(orderNumber));
                 
             }).WithMessage("Номер заказа уже существует в базе данных");
-                }
+                
+        }
+
+        // Custom validator method to check if the date is not too old
+        private bool BeARecentDate(DateTime deliveryTime)
+        {
+            // Define the threshold for how old the date can be, e.g., 1 year from the current date
+            var oneYearAgo = DateTime.Now.AddYears(-1);
+            return deliveryTime > oneYearAgo;
+        }
     }
 }

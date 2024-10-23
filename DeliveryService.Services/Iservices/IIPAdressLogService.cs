@@ -11,7 +11,7 @@ namespace DeliveryService.Services.Iservices
 {
     public interface IIPAdressLogService
     {
-        Task<int> Add(string Ip);
+        Task<int> Add(string Ip, string operation);
 
 
         Task<bool> Remove(int Id);
