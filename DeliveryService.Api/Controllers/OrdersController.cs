@@ -8,6 +8,7 @@ using Serilog;
 using FluentValidation;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authorization;
+using System.IO;
 
 
 namespace DeliveryService.Controllers
@@ -184,16 +185,24 @@ namespace DeliveryService.Controllers
                     {
                         writer.WriteLine("No results found.");
                     }
+
+                   
                 }
 
-                // Return the file path as a response
-                return Ok($"Results saved in file: {filePath}");
+                using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                {
+                    var bytes = new byte[stream.Length];
+                    stream.Read(bytes, 0, bytes.Length);
+                    return File(bytes, "text/plain", $"Фильтр-{DateTime.UtcNow:yyyy-MM-dd}.txt");
+                }
             }
             catch (Exception ex)
             {
                 Log.Error("Error writing file: {Message}", ex.Message);
                 return StatusCode(500, "Error saving results to file.");
             }
+
+          
 
         }
 
